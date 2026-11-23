@@ -1,0 +1,196 @@
+{
+  "name": "ch-md-to-image",
+  "displayName": "Markdown 转图片",
+  "description": "将 Markdown 预览为卡片并导出/复制高清 PNG（支持 KaTeX 公式与 Mermaid 图）。",
+  "version": "0.1.1",
+  "publisher": "chtools",
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ch516588773/ch-md-to-image"
+  },
+  "bugs": {
+    "url": "https://github.com/ch516588773/ch-md-to-image/issues"
+  },
+  "homepage": "https://github.com/ch516588773/ch-md-to-image#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters",
+    "Visualization"
+  ],
+  "keywords": [
+    "markdown",
+    "image",
+    "png",
+    "export",
+    "mermaid",
+    "katex"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "markdownImage.openPreview",
+        "title": "Open Preview",
+        "category": "Markdown Image",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "markdownImage.exportPng",
+        "title": "Export PNG",
+        "category": "Markdown Image",
+        "icon": "$(export)"
+      },
+      {
+        "command": "markdownImage.copyImage",
+        "title": "Copy Image",
+        "category": "Markdown Image",
+        "icon": "$(copy)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markdownImage.openPreview",
+          "group": "navigation@1"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markdownImage.exportPng",
+          "group": "navigation@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markdownImage.openPreview",
+          "group": "markdownImage@1"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markdownImage.exportPng",
+          "group": "markdownImage@2"
+        },
+        {
+          "when": "resourceLangId == markdown",
+          "command": "markdownImage.copyImage",
+          "group": "markdownImage@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "markdownImage.openPreview",
+          "when": "resourceLangId == markdown"
+        },
+        {
+          "command": "markdownImage.exportPng",
+          "when": "resourceLangId == markdown"
+        },
+        {
+          "command": "markdownImage.copyImage",
+          "when": "resourceLangId == markdown"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Markdown 转图片",
+      "properties": {
+        "markdownImage.width": {
+          "type": "number",
+          "default": 800,
+          "minimum": 320,
+          "maximum": 2400,
+          "description": "预览与导出的内容宽度（CSS 像素）。"
+        },
+        "markdownImage.scale": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "default": 2,
+          "description": "导出清晰度倍率（导出像素 ≈ CSS 尺寸 × 倍率）。"
+        },
+        "markdownImage.heightMode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "max"
+          ],
+          "enumDescriptions": [
+            "按内容完整高度导出",
+            "超过最大高度时裁切"
+          ],
+          "default": "auto",
+          "description": "高度模式：auto 完整高度；max 按最大高度裁切。"
+        },
+        "markdownImage.maxHeight": {
+          "type": "number",
+          "default": 4000,
+          "minimum": 200,
+          "maximum": 20000,
+          "description": "高度模式为 max 时的最大 CSS 高度。"
+        },
+        "markdownImage.theme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark"
+          ],
+          "enumDescriptions": [
+            "浅色",
+            "深色"
+          ],
+          "default": "light",
+          "description": "预览 / 导出配色主题。"
+        },
+        "markdownImage.padding": {
+          "type": "number",
+          "default": 32,
+          "minimum": 0,
+          "maximum": 120,
+          "description": "内容区内边距（CSS 像素）。"
+        },
+        "markdownImage.background": {
+          "type": "string",
+          "default": "",
+          "description": "可选背景色（如 #ffffff）。留空则使用主题默认色。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "package": "vsce package --no-dependencies --allow-missing-repository",
+    "lint": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.2",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@traptitech/markdown-it-katex": "^3.6.0",
+    "dompurify": "^3.5.0",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.21",
+    "markdown-it": "^14.1.0",
+    "mermaid": "^11.4.1",
+    "modern-screenshot": "^4.5.5"
+  }
+}
